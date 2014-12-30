@@ -8,9 +8,10 @@ Author: oxfn@ya.ru
 #define PIN_A 13
 #define PIN_B 12
 #define PIN_C 11
+#define PIN_D 10
 #define DELAY_MAX 200
-#define DELAY_MIN 100
-#define DELAY_STEP 1
+#define DELAY_MIN 50
+#define DELAY_STEP 5
 #define MODE_RUN 0x01
 #define MODE_STROBE 0x02
 #define POWER_OFF 0x00
@@ -29,6 +30,7 @@ void setup() {
   pinMode(PIN_A, OUTPUT);
   pinMode(PIN_B, OUTPUT);
   pinMode(PIN_C, OUTPUT);
+  pinMode(PIN_D, OUTPUT);
 }
 
 // the loop function runs over and over again forever
@@ -57,11 +59,13 @@ void loop() {
       digitalWrite(PIN_A, HIGH);
       digitalWrite(PIN_B, HIGH);
       digitalWrite(PIN_C, HIGH);
+      digitalWrite(PIN_D, HIGH);
       g_state = 0x00;
     } else {
       digitalWrite(PIN_A, LOW);
       digitalWrite(PIN_B, LOW);
       digitalWrite(PIN_C, LOW);
+      digitalWrite(PIN_D, LOW);
       g_state = 0x01;
     }
   } else if (g_mode = MODE_RUN) {
@@ -83,11 +87,19 @@ void loop() {
         // PIN C  
         if (g_state == 4) {
           digitalWrite(PIN_C, HIGH);
-          g_state = 0;
+          g_state = 8;
         } else {
           digitalWrite(PIN_C, LOW);
-          if (g_state == 0) {
-            g_state = 1;
+          
+          // PIN D
+          if (g_state == 8) {
+            digitalWrite(PIN_D, HIGH);
+            g_state = 0;
+          } else {
+            digitalWrite(PIN_D, LOW);
+            if (g_state == 0) {
+              g_state = 1;
+            }
           }
         }
       }
